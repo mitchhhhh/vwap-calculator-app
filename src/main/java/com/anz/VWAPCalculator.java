@@ -13,6 +13,7 @@ public class VWAPCalculator {
     // usage can't grow unbounded even if many prices are received in a short time frame
     private final LinkedList<MinuteBucket> slidingWindow = new LinkedList<>();
     private final static Duration ONE_HOUR = Duration.of(1, ChronoUnit.HOURS);
+    private final static int VWAP_SCALE = 4;
 
     private BigDecimal tradeValueInWindow = BigDecimal.ZERO;
     private BigInteger volumeInWindow = BigInteger.ZERO;
@@ -29,23 +30,15 @@ public class VWAPCalculator {
             addNewBucket(bucketKey, currencyPairPrice);
         }
 
-        return new VWAPDataPoint(
-                currencyPairPrice.currencyPair(),
-                getCurrentVWAP(),
-                currencyPairPrice.timestamp()
-        );
+        return new VWAPDataPoint(currencyPairPrice.currencyPair(), getCurrentVWAP(), currencyPairPrice.timestamp());
     }
 
     private BigDecimal getCurrentVWAP() {
-        return tradeValueInWindow.divide(new BigDecimal(volumeInWindow), 2, RoundingMode.HALF_EVEN);
+        return tradeValueInWindow.divide(new BigDecimal(volumeInWindow), VWAP_SCALE, RoundingMode.HALF_EVEN);
     }
 
     private void addNewBucket(Instant bucketKey, CurrencyPairPrice currencyPairPrice) {
-        MinuteBucket bucket = new MinuteBucket(
-                bucketKey,
-                currencyPairPrice.tradeValue(),
-                currencyPairPrice.volume()
-        );
+        MinuteBucket bucket = new MinuteBucket(bucketKey, currencyPairPrice.tradeValue(), currencyPairPrice.volume());
         slidingWindow.addFirst(bucket);
         addToWindowTotals(currencyPairPrice);
     }
@@ -62,7 +55,7 @@ public class VWAPCalculator {
     }
 
     private void removeBucketsOutsideWindow(Instant bucketKey) {
-        while (slidingWindow.getLast().bucketKey.plus(ONE_HOUR).compareTo(bucketKey) <= 0) {
+        while (!slidingWindow.isEmpty() && slidingWindow.getLast().bucketKey.plus(ONE_HOUR).compareTo(bucketKey) <= 0) {
             MinuteBucket removedElement = slidingWindow.removeLast();
             tradeValueInWindow = tradeValueInWindow.subtract(removedElement.tradeValue);
             volumeInWindow = volumeInWindow.subtract(removedElement.volume);
