@@ -64,8 +64,8 @@ public class VWAPCalculatorTest {
         VWAPDataPoint vwap3 = calculator.process(price3);
 
         // no need to assert on vwap1 in any of the other tests as its functionally the same as the assertion in the first test
-        assertEquals(vwap2, new VWAPDataPoint(currencyPair, fixedPrice, price2.timestamp()));
-        assertEquals(vwap3, new VWAPDataPoint(currencyPair, fixedPrice, price3.timestamp()));
+        assertEquals(vwap2, new VWAPDataPoint(currencyPair, fixedPrice.setScale(4), price2.timestamp()));
+        assertEquals(vwap3, new VWAPDataPoint(currencyPair, fixedPrice.setScale(4), price3.timestamp()));
     }
 
     @Test
@@ -82,10 +82,10 @@ public class VWAPCalculatorTest {
         VWAPDataPoint vwap3 = calculator.process(price3);
 
         // ((1 * 30) + (2 * 20)) / (30 + 20) = 70 / 50 = 1.4
-        assertEquals(vwap2, new VWAPDataPoint(currencyPair, new BigDecimal("1.40"), price2.timestamp()));
+        assertEquals(vwap2, new VWAPDataPoint(currencyPair, new BigDecimal("1.4000"), price2.timestamp()));
 
         // (70 + (3 * 50)) / (50 + 50) = 220 / 100 = 2.2
-        assertEquals(vwap3, new VWAPDataPoint(currencyPair, new BigDecimal("2.20"), price3.timestamp()));
+        assertEquals(vwap3, new VWAPDataPoint(currencyPair, new BigDecimal("2.2000"), price3.timestamp()));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class VWAPCalculatorTest {
         VWAPDataPoint vwap1 = calculator.process(price2);
         VWAPDataPoint vwap2 = calculator.process(price3);
 
-        assertEquals(vwap1, new VWAPDataPoint(currencyPair, new BigDecimal("1.50"), price2.timestamp()));
-        assertEquals(vwap2, new VWAPDataPoint(currencyPair, new BigDecimal("2.50"), price3.timestamp()));
+        assertEquals(vwap1, new VWAPDataPoint(currencyPair, new BigDecimal("1.5000"), price2.timestamp()));
+        assertEquals(vwap2, new VWAPDataPoint(currencyPair, new BigDecimal("2.5000"), price3.timestamp()));
     }
 }
