@@ -1,2 +1,1 @@
-rootProject.name = "anz-code-challenge"
-
+rootProject.name = "vwap-calculator-app"

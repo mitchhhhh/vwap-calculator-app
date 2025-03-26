@@ -1,4 +1,4 @@
-package com.anz;
+package com.vwap.calculator;
 
 import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;

@@ -3,7 +3,7 @@ plugins {
     application
 }
 
-group = "com.anz"
+group = "com.vwap.calculator"
 version = "1.0-SNAPSHOT"
 
 apply(plugin = "application")
@@ -19,7 +19,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("com.anz.Main")
+    mainClass.set("com.vwap.calculator.Main")
 }
 
 java {

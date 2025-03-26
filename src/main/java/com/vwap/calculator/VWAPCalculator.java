@@ -1,4 +1,4 @@
-package com.anz;
+package com.vwap.calculator;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
